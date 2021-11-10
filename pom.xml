@@ -12,7 +12,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>ingest</module>
+		<module>file-to-file</module>
 	</modules>
 
 	<properties>
