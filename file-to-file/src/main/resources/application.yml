@@ -1,0 +1,16 @@
+# Camel Spring Boot
+camel:
+  springboot:
+    name: ${project.artifactId}
+    main-run-controller: true
+
+# Logging
+logging:
+  config: classpath:logback.xml
+  level:
+    com.redhat.examples: INFO
+    
+# Application
+application:
+  inputDir: "target/input/"
+  outputDir: "target/output"
