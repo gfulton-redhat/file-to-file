@@ -1,6 +1,15 @@
 # ingest
 This is a simple example that demonstrates file to file processing using Camel DSL.
 
+## References
+- https://camel.apache.org/components/3.12.x/dataformats/jaxb-dataformat.html
+- https://camel.apache.org/manual/camel-3-migration-guide.html
+
+Install your project dependencies.
+```shell
+mvn clean install
+```
+
 Run your Spring Boot application locally.
 ```shell
 mvn spring-boot:run
