@@ -78,7 +78,7 @@ public class PurchaseOrderRoute extends RouteBuilder {
 
     public Processor processor() {
         return exchange -> {
-            // Read in the purchase order
+            // Grab the purchase order from the Exchange body
             PurchaseOrderType purchaseOrderType = exchange.getIn().getBody(PurchaseOrderType.class);
 
             // Update the bill to city
