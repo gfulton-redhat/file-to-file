@@ -75,7 +75,7 @@ public class ApplicationProperties {
 
     @PostConstruct
     public void setProperty() {
-        // Use woodstock fast xml for parsing
+        // Use woodstock parsing XML
         System.setProperty(XML_STREAM_XML_INPUT_FACTORY, getXmlInputFactory());
         System.setProperty(XML_STREAM_XML_OUTPUT_FACTORY, getXmlOutputFactory());
         System.setProperty(XML_STREAM_XML_EVENT_FACTORY, getXmlEventFactory());

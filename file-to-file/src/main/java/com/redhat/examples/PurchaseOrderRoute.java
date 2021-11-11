@@ -17,7 +17,7 @@
 package com.redhat.examples;
 
 import com.redhat.examples.model.PurchaseOrderType;
-import org.apache.camel.Exchange;
+import com.redhat.examples.model.USAddress;
 import org.apache.camel.LoggingLevel;
 import org.apache.camel.Processor;
 import org.apache.camel.builder.RouteBuilder;
@@ -28,8 +28,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.stream.Stream;
 
 
 @Component
@@ -42,10 +45,6 @@ public class PurchaseOrderRoute extends RouteBuilder {
 
     @Override
     public void configure() throws Exception {
-        //JacksonXMLDataFormat xmlDataFormat = new JacksonXMLDataFormat();
-
-// and you can specify the pojo class type also
-       // xmlDataFormat.setUnmarshalType(PurchaseOrderType.class);
         // Create a new XML handler using JAXB
         JaxbDataFormat xmlDataFormat = new JaxbDataFormat(true);
 
@@ -65,39 +64,52 @@ public class PurchaseOrderRoute extends RouteBuilder {
                 .unmarshal(xmlDataFormat)
 
                 // Process the purchase order
-                .process(newPurchaseOrderProcessor())
+                .process(processor())
 
                 // Convert the Java POJO to XML
                 .marshal(xmlDataFormat)
 
                 // Write XML to a file
                 .toF("file:%s", properties.getOutputDir())
-                .log(LoggingLevel.INFO, log, "Write file: [${headers.CamelFileName}]")
 
                 // Finish the Route
                 .end();
     }
 
-    public Processor newPurchaseOrderProcessor(){
+    public Processor processor() {
         return exchange -> {
-            // Set the employee name to lowercase
-            System.out.println("Properties: "+exchange.getAllProperties());
+            // Read in the purchase order
             PurchaseOrderType purchaseOrderType = exchange.getIn().getBody(PurchaseOrderType.class);
 
-            System.out.println("purchase order type: "+purchaseOrderType);
+            // Update the bill to city
+            purchaseOrderType.setBillTo(updateBillTo(purchaseOrderType.getBillTo()));
 
+            // Update the list of ship to
+            purchaseOrderType.getShipTo().stream().forEach(shipTo -> updateShipTo(shipTo));
 
-
-
-            // Update the order date to the current datetime
-            GregorianCalendar c = new GregorianCalendar();
-            c.setTime(new Date());
-            purchaseOrderType.setOrderDate(DatatypeFactory.newInstance().newXMLGregorianCalendar(c));
-
-            purchaseOrderType.getBillTo().setCity("Farmville");
             // Write the updated purchase order
             exchange.getIn().setBody(purchaseOrderType);
         };
     }
+
+    public USAddress updateBillTo(USAddress billTo) {
+        billTo.setState("North Carolina");
+        billTo.setCity("Farmville");
+        billTo.setCountry("United States");
+        billTo.setStreet("504 Cameron Street");
+        billTo.setZip(BigInteger.valueOf(92105));
+        return billTo;
+    }
+
+    public USAddress updateShipTo(USAddress shipTo) {
+        shipTo.setState("North Carolina");
+        shipTo.setCity("Farmville");
+        shipTo.setCountry("United States");
+        shipTo.setStreet("504 Cameron Street");
+        shipTo.setZip(BigInteger.valueOf(92105));
+        return shipTo;
+    }
 }
+
+
 
