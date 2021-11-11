@@ -19,22 +19,66 @@ package com.redhat.examples;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.PostConstruct;
+
 @Component
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
+    private static String XML_STREAM_XML_INPUT_FACTORY = "xml.stream.XMLInputFactory";
+    private static String XML_STREAM_XML_OUTPUT_FACTORY = "xml.stream.XMLOutputFactory";
+    private static String XML_STREAM_XML_EVENT_FACTORY = "xml.stream.XMLEventFactory";
+    private String inputDir;
+    private String outputDir;
+    private String xmlInputFactory;
+    private String xmlOutputFactory;
+    private String xmlEventFactory;
 
-  private String inputDir;
-  private String outputDir;
+    public String getInputDir() {
+        return inputDir;
+    }
 
-  public String getInputDir() {
-    return inputDir;
-  }
+    public void setInputDir(String dir) {
+        this.inputDir = dir;
+    }
 
-  public void setInputDir(String dir){this.inputDir = dir;}
+    public String getOutputDir() {
+        return outputDir;
+    }
 
-  public String getOutputDir() {return outputDir;}
+    public void setOutputDir(String dir) {
+        this.outputDir = dir;
+    }
 
-  public void setOutputDir(String dir) {
-    this.outputDir = dir;
-  }
+    public String getXmlInputFactory() {
+        return xmlInputFactory;
+    }
+
+    public void setXmlInputFactory(String xmlInputFactory) {
+        this.xmlInputFactory = xmlInputFactory;
+    }
+
+    public String getXmlOutputFactory() {
+        return xmlOutputFactory;
+    }
+
+    public void setXmlOutputFactory(String xmlOutputFactory) {
+        this.xmlOutputFactory = xmlOutputFactory;
+    }
+
+    public String getXmlEventFactory() {
+        return xmlEventFactory;
+    }
+
+    public void setXmlEventFactory(String xmlEventFactory) {
+        this.xmlEventFactory = xmlEventFactory;
+    }
+
+    @PostConstruct
+    public void setProperty() {
+        // Use woodstock parsing XML
+        System.setProperty(XML_STREAM_XML_INPUT_FACTORY, getXmlInputFactory());
+        System.setProperty(XML_STREAM_XML_OUTPUT_FACTORY, getXmlOutputFactory());
+        System.setProperty(XML_STREAM_XML_EVENT_FACTORY, getXmlEventFactory());
+    }
+
 }
