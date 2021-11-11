@@ -11,7 +11,7 @@ Copy the file `src/test/data/purchase-order.xml` to the `target/input` directory
 cp src/test/data/purchase-order.xml target/input
 ```
 
-In [PurchaseOrderRoute.java](src/main/java/com/redhat/examples/PurchaseOrderRoute.java) we configure a Route to read the purchase order and process the ship to and bill to addresses.
+In [PurchaseOrderRoute.java](src/main/java/com/redhat/examples/PurchaseOrderRoute.java) we configure a Route to read the purchase order and process the ship to and bill to address information.
 
 Confirm the Camel wrote the file contents `target/output/single-weld.json
 ```shell

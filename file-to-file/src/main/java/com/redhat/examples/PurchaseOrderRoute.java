@@ -64,7 +64,19 @@ public class PurchaseOrderRoute extends RouteBuilder {
                 .unmarshal(xmlDataFormat)
 
                 // Process the purchase order
-                .process(processor())
+                .process(exchange -> {
+                    // Grab the purchase order from the Exchange body
+                    PurchaseOrderType po = exchange.getIn().getBody(PurchaseOrderType.class);
+
+                    // Update the bill to city
+                    po.setBillTo(updateBillTo(po.getBillTo()));
+
+                    // Update the list of ship to
+                    po.getShipTo().stream().forEach(shipTo -> updateShipTo(shipTo));
+
+                    // Write the updated purchase order
+                    exchange.getIn().setBody(po);
+                })
 
                 // Convert the Java POJO to XML
                 .marshal(xmlDataFormat)
@@ -76,26 +88,9 @@ public class PurchaseOrderRoute extends RouteBuilder {
                 .end();
     }
 
-    public Processor processor() {
-        return exchange -> {
-            // Grab the purchase order from the Exchange body
-            PurchaseOrderType purchaseOrderType = exchange.getIn().getBody(PurchaseOrderType.class);
-
-            // Update the bill to city
-            purchaseOrderType.setBillTo(updateBillTo(purchaseOrderType.getBillTo()));
-
-            // Update the list of ship to
-            purchaseOrderType.getShipTo().stream().forEach(shipTo -> updateShipTo(shipTo));
-
-            // Write the updated purchase order
-            exchange.getIn().setBody(purchaseOrderType);
-        };
-    }
-
     public USAddress updateBillTo(USAddress billTo) {
         billTo.setState("North Carolina");
         billTo.setCity("Farmville");
-        billTo.setCountry("United States");
         billTo.setStreet("504 Cameron Street");
         billTo.setZip(BigInteger.valueOf(92105));
         return billTo;
@@ -104,7 +99,6 @@ public class PurchaseOrderRoute extends RouteBuilder {
     public USAddress updateShipTo(USAddress shipTo) {
         shipTo.setState("North Carolina");
         shipTo.setCity("Farmville");
-        shipTo.setCountry("United States");
         shipTo.setStreet("504 Cameron Street");
         shipTo.setZip(BigInteger.valueOf(92105));
         return shipTo;
