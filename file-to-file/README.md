@@ -6,9 +6,9 @@ Run your Spring Boot application locally.
 mvn spring-boot:run
 ```
 
-Copy the file `src/test/data/single-weld.json` to the `target/input` directory.
+Copy the file `src/test/data/purchase-order.xml` to the `target/input` directory.
 ```shell
-cp src/test/data/single-weld.json target/input
+cp src/test/data/purchase-order.xml target/input
 ```
 
 Observer the input file being processed in your terminal console.
@@ -19,5 +19,5 @@ Observer the input file being processed in your terminal console.
 
 Confirm the Camel wrote the file contents `target/output/single-weld.json
 ```shell
-cat target/output/single-weld.json
+cat target/output/purchase-order.xml
 ```

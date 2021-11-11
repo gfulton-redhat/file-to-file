@@ -14,3 +14,6 @@ logging:
 application:
   inputDir: "target/input/"
   outputDir: "target/output"
+  xmlInputFactory: "com.ctc.wstx.stax.WstxInputFactory"
+  xmlOutputFactory: "com.ctc.wstx.stax.WstxOutputFactory"
+  xmlEventFactory: "com.ctc.wstx.stax.WstxEventFactory"
