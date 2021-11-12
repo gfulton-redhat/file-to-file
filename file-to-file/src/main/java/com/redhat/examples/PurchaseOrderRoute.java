@@ -32,6 +32,7 @@ import javax.xml.datatype.XMLGregorianCalendar;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 
@@ -68,11 +69,17 @@ public class PurchaseOrderRoute extends RouteBuilder {
                     // Grab the purchase order from the Exchange body
                     PurchaseOrderType po = exchange.getIn().getBody(PurchaseOrderType.class);
 
-                    // Update the bill to city
-                    po.setBillTo(updateBillTo(po.getBillTo()));
+                    // Update the bill to or create a new one
+                    USAddress billTo = Optional.ofNullable(po.getBillTo()).orElseGet(() -> new USAddress() );
+                    billTo.setState("North Carolina");
+                    billTo.setCity("Farmville");
+                    billTo.setStreet("504 Cameron Street");
+                    billTo.setZip(BigInteger.valueOf(92105));
+                    po.setBillTo(billTo);
 
-                    // Update the list of ship to
-                    po.getShipTo().stream().forEach(shipTo -> updateShipTo(shipTo));
+                    // Update the list of ship to addresses
+                    Optional.ofNullable(po.getShipTo()).get()
+                            .forEach(shipTo -> updateShipTo(shipTo));
 
                     // Write the updated purchase order
                     exchange.getIn().setBody(po);
@@ -86,14 +93,6 @@ public class PurchaseOrderRoute extends RouteBuilder {
 
                 // Finish the Route
                 .end();
-    }
-
-    public USAddress updateBillTo(USAddress billTo) {
-        billTo.setState("North Carolina");
-        billTo.setCity("Farmville");
-        billTo.setStreet("504 Cameron Street");
-        billTo.setZip(BigInteger.valueOf(92105));
-        return billTo;
     }
 
     public USAddress updateShipTo(USAddress shipTo) {
