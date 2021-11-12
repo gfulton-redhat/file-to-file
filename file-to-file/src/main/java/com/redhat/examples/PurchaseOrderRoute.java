@@ -70,7 +70,7 @@ public class PurchaseOrderRoute extends RouteBuilder {
                     PurchaseOrderType po = exchange.getIn().getBody(PurchaseOrderType.class);
 
                     // Update the bill to or create a new one
-                    USAddress billTo = Optional.ofNullable(po.getBillTo()).orElseGet(() -> new USAddress() );
+                    USAddress billTo = Optional.ofNullable(po.getBillTo()).orElseGet(() -> new USAddress());
                     billTo.setState("North Carolina");
                     billTo.setCity("Farmville");
                     billTo.setStreet("504 Cameron Street");
