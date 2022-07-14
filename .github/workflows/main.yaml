@@ -1,0 +1,16 @@
+---
+name: file-to-file
+on:
+  push:
+  pull_request_target:
+    types:
+      - opened
+      - edited
+      - synchronize
+  workflow_dispatch:
+permissions:
+  pull-requests: write
+jobs:
+  package:
+    uses: gfulton-redhat/github-workflows/.github/workflows/maven.yaml@main
+    secrets: inherit
