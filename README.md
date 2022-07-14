@@ -1,6 +1,8 @@
 # ingest
 This is a simple example that demonstrates file to file processing using Camel DSL.
 
+[![.github/workflows/main.yaml](https://github.com/gfulton-redhat/file-to-file/actions/workflows/main.yaml/badge.svg?branch=main)](https://github.com/gfulton-redhat/file-to-file/actions/workflows/main.yaml)
+
 ## References
 - https://camel.apache.org/components/3.12.x/dataformats/jaxb-dataformat.html
 - https://camel.apache.org/manual/camel-3-migration-guide.html
