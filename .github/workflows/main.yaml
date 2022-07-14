@@ -11,6 +11,6 @@ on:
 permissions:
   pull-requests: write
 jobs:
-  package:
+  build:
     uses: gfulton-redhat/github-workflows/.github/workflows/maven.yaml@main
     secrets: inherit
