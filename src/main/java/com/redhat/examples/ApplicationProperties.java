@@ -24,61 +24,69 @@ import javax.annotation.PostConstruct;
 @Component
 @ConfigurationProperties(prefix = "application")
 public class ApplicationProperties {
-    private static String XML_STREAM_XML_INPUT_FACTORY = "xml.stream.XMLInputFactory";
-    private static String XML_STREAM_XML_OUTPUT_FACTORY = "xml.stream.XMLOutputFactory";
-    private static String XML_STREAM_XML_EVENT_FACTORY = "xml.stream.XMLEventFactory";
-    private String inputDir;
-    private String outputDir;
-    private String xmlInputFactory;
-    private String xmlOutputFactory;
-    private String xmlEventFactory;
 
-    public String getInputDir() {
-        return inputDir;
-    }
+	private static String XML_STREAM_XML_INPUT_FACTORY = "xml.stream.XMLInputFactory";
 
-    public void setInputDir(String dir) {
-        this.inputDir = dir;
-    }
+	private static String XML_STREAM_XML_OUTPUT_FACTORY = "xml.stream.XMLOutputFactory";
 
-    public String getOutputDir() {
-        return outputDir;
-    }
+	private static String XML_STREAM_XML_EVENT_FACTORY = "xml.stream.XMLEventFactory";
 
-    public void setOutputDir(String dir) {
-        this.outputDir = dir;
-    }
+	private String inputDir;
 
-    public String getXmlInputFactory() {
-        return xmlInputFactory;
-    }
+	private String outputDir;
 
-    public void setXmlInputFactory(String xmlInputFactory) {
-        this.xmlInputFactory = xmlInputFactory;
-    }
+	private String xmlInputFactory;
 
-    public String getXmlOutputFactory() {
-        return xmlOutputFactory;
-    }
+	private String xmlOutputFactory;
 
-    public void setXmlOutputFactory(String xmlOutputFactory) {
-        this.xmlOutputFactory = xmlOutputFactory;
-    }
+	private String xmlEventFactory;
 
-    public String getXmlEventFactory() {
-        return xmlEventFactory;
-    }
+	public String getInputDir() {
+		return inputDir;
+	}
 
-    public void setXmlEventFactory(String xmlEventFactory) {
-        this.xmlEventFactory = xmlEventFactory;
-    }
+	public void setInputDir(String dir) {
+		this.inputDir = dir;
+	}
 
-    @PostConstruct
-    public void setProperty() {
-        // Use woodstock parsing XML
-        System.setProperty(XML_STREAM_XML_INPUT_FACTORY, getXmlInputFactory());
-        System.setProperty(XML_STREAM_XML_OUTPUT_FACTORY, getXmlOutputFactory());
-        System.setProperty(XML_STREAM_XML_EVENT_FACTORY, getXmlEventFactory());
-    }
+	public String getOutputDir() {
+		return outputDir;
+	}
+
+	public void setOutputDir(String dir) {
+		this.outputDir = dir;
+	}
+
+	public String getXmlInputFactory() {
+		return xmlInputFactory;
+	}
+
+	public void setXmlInputFactory(String xmlInputFactory) {
+		this.xmlInputFactory = xmlInputFactory;
+	}
+
+	public String getXmlOutputFactory() {
+		return xmlOutputFactory;
+	}
+
+	public void setXmlOutputFactory(String xmlOutputFactory) {
+		this.xmlOutputFactory = xmlOutputFactory;
+	}
+
+	public String getXmlEventFactory() {
+		return xmlEventFactory;
+	}
+
+	public void setXmlEventFactory(String xmlEventFactory) {
+		this.xmlEventFactory = xmlEventFactory;
+	}
+
+	@PostConstruct
+	public void setProperty() {
+		// Use woodstock parsing XML
+		System.setProperty(XML_STREAM_XML_INPUT_FACTORY, getXmlInputFactory());
+		System.setProperty(XML_STREAM_XML_OUTPUT_FACTORY, getXmlOutputFactory());
+		System.setProperty(XML_STREAM_XML_EVENT_FACTORY, getXmlEventFactory());
+	}
 
 }

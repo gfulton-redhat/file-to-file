@@ -35,74 +35,70 @@ import java.util.GregorianCalendar;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-
 @Component
 public class PurchaseOrderRoute extends RouteBuilder {
 
-    private static final Logger log = LoggerFactory.getLogger(PurchaseOrderRoute.class);
+	private static final Logger log = LoggerFactory.getLogger(PurchaseOrderRoute.class);
 
-    @Autowired
-    private ApplicationProperties properties;
+	@Autowired
+	private ApplicationProperties properties;
 
-    @Override
-    public void configure() throws Exception {
-        // Create a new XML handler using JAXB
-        JaxbDataFormat xmlDataFormat = new JaxbDataFormat(true);
+	@Override
+	public void configure() throws Exception {
+		// Create a new XML handler using JAXB
+		JaxbDataFormat xmlDataFormat = new JaxbDataFormat(true);
 
-        // Set the context to point to the generated classes
-        xmlDataFormat.setContextPath(PurchaseOrderType.class.getPackage().getName());
+		// Set the context to point to the generated classes
+		xmlDataFormat.setContextPath(PurchaseOrderType.class.getPackage().getName());
 
-        // Point to the purchase order schema
-        xmlDataFormat.setSchema("classpath:purchase-order.xsd");
+		// Point to the purchase order schema
+		xmlDataFormat.setSchema("classpath:purchase-order.xsd");
 
-        // Read from the input directory
-        fromF("file:%s?delete=true&readLock=fileLock", properties.getInputDir())
+		// Read from the input directory
+		fromF("file:%s?delete=true&readLock=fileLock", properties.getInputDir())
 
-                // Write a log messages when a new file is detected
-                .log(LoggingLevel.INFO, log, "Picked up a file: [${headers.CamelFileName}]")
+				// Write a log messages when a new file is detected
+				.log(LoggingLevel.INFO, log, "Picked up a file: [${headers.CamelFileName}]")
 
-                // Convert the XML to Java POJO
-                .unmarshal(xmlDataFormat)
+				// Convert the XML to Java POJO
+				.unmarshal(xmlDataFormat)
 
-                // Process the purchase order
-                .process(exchange -> {
-                    // Grab the purchase order from the Exchange body
-                    PurchaseOrderType po = exchange.getIn().getBody(PurchaseOrderType.class);
+				// Process the purchase order
+				.process(exchange -> {
+					// Grab the purchase order from the Exchange body
+					PurchaseOrderType po = exchange.getIn().getBody(PurchaseOrderType.class);
 
-                    // Update the bill to or create a new one
-                    USAddress billTo = Optional.ofNullable(po.getBillTo()).orElseGet(() -> new USAddress());
-                    billTo.setState("North Carolina");
-                    billTo.setCity("Farmville");
-                    billTo.setStreet("504 Cameron Street");
-                    billTo.setZip(BigInteger.valueOf(92105));
-                    po.setBillTo(billTo);
+					// Update the bill to or create a new one
+					USAddress billTo = Optional.ofNullable(po.getBillTo()).orElseGet(() -> new USAddress());
+					billTo.setState("North Carolina");
+					billTo.setCity("Farmville");
+					billTo.setStreet("504 Cameron Street");
+					billTo.setZip(BigInteger.valueOf(92105));
+					po.setBillTo(billTo);
 
-                    // Update the list of ship to addresses
-                    Optional.ofNullable(po.getShipTo()).get()
-                            .forEach(shipTo -> updateShipTo(shipTo));
+					// Update the list of ship to addresses
+					Optional.ofNullable(po.getShipTo()).get().forEach(shipTo -> updateShipTo(shipTo));
 
-                    // Write the updated purchase order
-                    exchange.getIn().setBody(po);
-                })
+					// Write the updated purchase order
+					exchange.getIn().setBody(po);
+				})
 
-                // Convert the Java POJO to XML
-                .marshal(xmlDataFormat)
+				// Convert the Java POJO to XML
+				.marshal(xmlDataFormat)
 
-                // Write XML to a file
-                .toF("file:%s", properties.getOutputDir())
+				// Write XML to a file
+				.toF("file:%s", properties.getOutputDir())
 
-                // Finish the Route
-                .end();
-    }
+				// Finish the Route
+				.end();
+	}
 
-    public USAddress updateShipTo(USAddress shipTo) {
-        shipTo.setState("North Carolina");
-        shipTo.setCity("Farmville");
-        shipTo.setStreet("504 Cameron Street");
-        shipTo.setZip(BigInteger.valueOf(92105));
-        return shipTo;
-    }
+	public USAddress updateShipTo(USAddress shipTo) {
+		shipTo.setState("North Carolina");
+		shipTo.setCity("Farmville");
+		shipTo.setStreet("504 Cameron Street");
+		shipTo.setZip(BigInteger.valueOf(92105));
+		return shipTo;
+	}
+
 }
-
-
-
